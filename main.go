@@ -1,15 +1,16 @@
-
 package main
 
 import (
-    "inventory-app/config"
-    "inventory-app/routes"
-    "github.com/gin-gonic/gin"
+	"inventory-app/config"
+	"inventory-app/routes"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-    r := gin.Default()
-    config.ConnectDatabase()
-    routes.SetupRoutes(r)
-    r.Run(":8080")
+	r := gin.Default()
+	config.ConnectDatabase()
+	routes.SetupRoutes(r)
+	routes.ImageRoutes(r)
+	r.Run(":8080")
 }

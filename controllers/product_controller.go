@@ -61,28 +61,3 @@ func DeleteProduct(c *gin.Context) {
 	config.DB.Delete(&models.Product{}, id)
 	c.JSON(http.StatusOK, gin.H{"message": "Produk dihapus"})
 }
-
-func UploadImage(c *gin.Context) {
-	id := c.Param("id")
-	file, err := c.FormFile("image")
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "File tidak valid"})
-		return
-	}
-
-	filename := "uploads/" + file.Filename
-	if err := c.SaveUploadedFile(file, filename); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal upload"})
-		return
-	}
-
-	var product models.Product
-	if err := config.DB.First(&product, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Produk tidak ditemukan"})
-		return
-	}
-
-	product.Image = filename
-	config.DB.Save(&product)
-	c.JSON(http.StatusOK, gin.H{"message": "Gambar berhasil diunggah", "image": filename})
-}
